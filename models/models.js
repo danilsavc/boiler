@@ -32,13 +32,17 @@ const Supplements = sequelize.define("supplements", {
   price: { type: DataTypes.INTEGER },
 });
 
+const DishSupplement = sequelize.define("dish_supplement", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+});
+
 const Category = sequelize.define("category", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING },
 });
 
-Dish.hasMany(Supplements, { as: "supplements" });
-Supplements.belongsTo(Dish);
+Dish.belongsToMany(Supplements, { through: "dish_supplement" });
+Supplements.belongsToMany(Dish, { through: "dish_supplement" });
 
 Category.hasMany(Dish);
 Dish.belongsTo(Category);
@@ -48,5 +52,6 @@ export default {
   Reviews,
   Dish,
   Supplements,
+  DishSupplement,
   Category,
 };

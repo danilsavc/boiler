@@ -1,5 +1,5 @@
 import { Router } from "express";
-import adminController from "../controllers/adminController.js";
+import dishController from "../controllers/dishController.js";
 import Validations from "../validations/validations.js";
 import errorValid from "../middleware/ErrorValidationsMeddleware.js";
 import authMiddleware from "../middleware/authMiddleware.js";
@@ -7,8 +7,7 @@ import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = new Router();
 
-router.post("/registration", Validations.adminValidation, errorValid, adminController.registration);
-router.post("/login", Validations.adminValidation, adminController.login);
-router.get("/check", authMiddleware, adminController.check);
+router.post("/", authMiddleware, Validations.dishValidation, errorValid, dishController.create);
+router.get("/", dishController.getAll);
 
 export default router;
