@@ -34,12 +34,6 @@ class Validations {
       .withMessage("Ціна є обов'язковою для заповнення")
       .isInt({ min: 5 })
       .withMessage("Ціна повинна бути числом і не менше 5"),
-
-    body("imgUrl")
-      .notEmpty()
-      .withMessage("Посилання на зображення є обов'язковим для заповнення")
-      .isURL()
-      .withMessage("Посилання на зображення повинно бути валідним URL"),
   ];
 
   categoryValidation = [
