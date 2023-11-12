@@ -65,17 +65,36 @@ class DishController {
   async getAll(req, res, next) {
     try {
       const dish = await Dish.findAll();
-      const supplement = await DishSupplement.findAll();
+      const dishSupplement = await DishSupplement.findAll();
+      const supplements = await Supplements.findAll();
+
+      if (!supplements) {
+        return next(ApiError.badRequest("Наразі добавок немає"));
+      }
 
       if (!dish) {
         return next(ApiError.badRequest("Наразі страв немає"));
       }
 
-      if (!supplement) {
-        return next(ApiError.badRequest("Наразі добавок немає"));
+      if (!dishSupplement) {
+        return next(ApiError.badRequest("Наразі добавок до цього блюда немає"));
       }
 
-      return res.json({ dish, supplement });
+      const result = {
+        dish: dish.map((dishItem) => ({
+          ...dishItem.get(),
+          dishSupplement: dishSupplement
+            .filter((item) => item.dishId === dishItem.id)
+            .map((supplementItem) => ({
+              supplementItem: supplements
+                .filter((item) => supplementItem.supplementId === item.id)
+                .map((item) => item.get()),
+            }))
+            .flatMap((supplementItem) => supplementItem.supplementItem),
+        })),
+      };
+
+      return res.json(result);
     } catch (error) {
       next(ApiError.badRequest(error));
     }

@@ -29,23 +29,6 @@ class SupplementsController {
     const categories = await Supplements.findAll();
     return res.json(categories);
   }
-
-  async dishSupplements(req, res, next) {
-    try {
-      const { dish_id } = req.body;
-
-      const dish = await Dish.findOne({ where: { id: dish_id } });
-      if (!dish) {
-        return next(ApiError.badRequest("Такої страви не існує"));
-      }
-
-      const dishSupplement = await DishSupplement.findAll({ where: { dishId: dish.id } });
-
-      return res.json(dishSupplement);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
 }
 
 export default new SupplementsController();

@@ -14,5 +14,4 @@ router.post(
   supplementsController.create
 );
 router.get("/", supplementsController.getAll);
-router.post("/dishSupplements", supplementsController.dishSupplements);
 export default router;
